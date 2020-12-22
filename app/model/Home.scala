@@ -6,6 +6,7 @@
 
 package model
 
+
 // Topページのviewvalue
 case class ViewValueHome(
   title:  String,
