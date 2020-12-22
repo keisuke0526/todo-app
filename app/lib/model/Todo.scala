@@ -8,7 +8,6 @@ import java.time.LocalDateTime
 import Todo._
 case class Todo(
   id:          Option[Id],
-  //category_id: Option[Id],
   title:       String,
   state:       Status,
   content:     String,
@@ -20,7 +19,7 @@ case class Todo(
 // コンパニオンオブジェクト
 object Todo{
 
-  val Id = the[Identity[id]]
+  val Id = the[Identity[Id]]
   type Id = Long @@ Todo
   type WithNoId = Entity.WithNoId [Id, Todo]
   //メモ []の中身Id,Todoは、定義元ではどのように処理しているのか？
@@ -39,8 +38,8 @@ object Todo{
     new Entity.WithNoId(
       new Todo(
         id          = None,
-        //category_id = category_id,
         title       = title,
+        state       = state,
         content     = content
       )
     )
