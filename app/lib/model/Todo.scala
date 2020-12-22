@@ -7,12 +7,13 @@ import java.time.LocalDateTime
 
 import Todo._
 case class Todo(
-  id:       Option[Id],
-  title:    String,
-  state:    Status,
-  content:  String,
-  updatedAt: LocalDateTime = NOW,
-  createdAt: LocalDateTime = NOW
+  id:          Option[Id],
+  //category_id: Option[Id],
+  title:       String,
+  state:       Status,
+  content:     String,
+  updatedAt:   LocalDateTime = NOW,
+  createdAt:   LocalDateTime = NOW
 ) extends EntityModel[Id]
 
 
@@ -27,19 +28,20 @@ object Todo{
   type EmbeddedId = Entity.EmbeddedId[Id, Todo]
 
   sealed abstract class Status(val code: Short, val name: String) extends EnumStatus
-  //　メモ EnumStatusはどこから？EnumStatus.Ofとは？
   object Status extends EnumStatus.Of[Status] {
-    case object ToDo  extends Status(code = 0, name = "ToDo")
-    case object Doing extends Status(code = 1, name = "Doing")
-    case object Done  extends Status(code = 2, name = "Done")
+    case object ToDo  extends Status(code = 0, name = "着手前")
+    case object Doing extends Status(code = 1, name = "進行中")
+    case object Done  extends Status(code = 2, name = "完了")
   }
 
+  //category_id: Option[id]は一旦削除
   def build(title: String, state: Status, content: String): WithNoId = {
     new Entity.WithNoId(
       new Todo(
-        id      = None,
-        title   = title,
-        content = content
+        id          = None,
+        //category_id = category_id,
+        title       = title,
+        content     = content
       )
     )
   }
