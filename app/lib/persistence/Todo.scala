@@ -5,17 +5,23 @@ import ixias.persistence.SlickRepository
 import lib.model.Todo
 import slick.jdbc.JdbcProfile
 
+
 case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Todo.Id, Todo, P]
   with db.SlickResourceProvider[P] {
 
   import api._
 
+  def getAll(): Future[Seq[EntityEmbeddedId]] =
+    RunDBAction(TodoTable, "slave") { slick =>
+      slick.result
+    }
+
   def get(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _
       .filter(_.id === id)
       .result.headOption
-  }
+    }
 
   //Add User Data 
   def add(entity: EntityWithNoId): Future[Id] =
