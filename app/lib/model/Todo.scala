@@ -9,8 +9,8 @@ import Todo._
 case class Todo(
   id:          Option[Id],
   title:       String,
-  state:       Status,
   content:     String,
+  state:       Status,
   updatedAt:   LocalDateTime = NOW,
   createdAt:   LocalDateTime = NOW
 ) extends EntityModel[Id]
