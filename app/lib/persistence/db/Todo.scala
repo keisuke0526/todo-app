@@ -3,8 +3,10 @@ package lib.persistence.db
 import java.time.LocalDateTime
 import slick.jdbc.JdbcProfile
 import ixias.persistence.model.Table
-
+import lib.model.Category 
 import lib.model.Todo
+import lib.model.Todo.Status
+
 
 //Todoテーブルへのマッピングを行う
 case class TodoTable[P <: JdbcProfile]()(implicit val driver: P)
@@ -24,29 +26,30 @@ case class TodoTable[P <: JdbcProfile]()(implicit val driver: P)
   //Tableの定義
   class Table(tag: Tag) extends BasicTable(tag, "to_do") {
     import Todo._
-    //Columns
     // Columns
-    /* @1 */ def id        = column[Id]            ("id",         O.UInt64, O.PrimaryKey, O.AutoInc)
-    /* @2 */ def title     = column[String]        ("title",      O.Utf8Char255)
-    /* @3 */ def content   = column[String]         ("content",   O.Utf8Char255)
-    /* @4 */ def state     = column[Status]        ("state",      O.UInt8)
-    /* @5 */ def updatedAt = column[LocalDateTime] ("updated_at", O.TsCurrent)
-    /* @6 */ def createdAt = column[LocalDateTime] ("created_at", O.Ts)
+    /* @1 */ def id              = column[Id]            ("id",           O.UInt64, O.PrimaryKey, O.AutoInc)
+    /* @2 */ def category_id     = column[Category.Id]   ("category_id",  O.UInt64)
+    /* @3 */ def title           = column[String]        ("title",        O.Utf8Char255)
+    /* @4 */ def content         = column[String]        ("content",      O.Utf8Char255)
+    /* @5 */ def state           = column[Status]        ("state",        O.UInt8)
+    /* @6 */ def updatedAt       = column[LocalDateTime] ("updated_at",   O.TsCurrent)
+    /* @7 */ def createdAt       = column[LocalDateTime] ("created_at",   O.Ts)
+ 
 
     type TableElementTuple = (
-      Option[Id], String, String, Status, LocalDateTime, LocalDateTime
+      Option[Id], Category.Id, String, String, Status, LocalDateTime, LocalDateTime
     )
 
   // DB <=> Scalaの相互のマッピングの定義
   
-    def * = (id.?, title, content, state, updatedAt, createdAt) <> (
+    def * = (id.?, category_id, title, content, state, updatedAt, createdAt) <> (
       // Tuple(table) => Model
       (t: TableElementTuple) => Todo(
-        t._1, t._2, t._3, t._4, t._5, t._6
+        t._1, t._2, t._3, t._4, t._5, t._6, t._7
       ),
       // Model => Tuple(table)
       (v: TableElementType) => Todo.unapply(v).map { t => (
-        t._1, t._2, t._3, t._4, LocalDateTime.now(), t._6
+        t._1, t._2, t._3, t._4, t._5, LocalDateTime.now(), t._7
       )}
     )
   }
