@@ -23,14 +23,14 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
       .result.headOption
     }
 
-  //Add User Data 
+  //Add Todo Data 
   def add(entity: EntityWithNoId): Future[Id] =
     RunDBAction(TodoTable) { slick =>
       slick returning slick.map(_.id) += entity.v
     }
 
   
-  // Update User Data 
+  // Update Todo Data 
   def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoTable) { slick =>
       val row = slick.filter(_.id === entity.id)
@@ -43,7 +43,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
       } yield old
     }
 
-  // Delete User Data
+  // Delete Todo Data
   def remove(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoTable) { slick =>
       val row = slick.filter(_.id === id)
