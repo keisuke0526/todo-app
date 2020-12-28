@@ -28,7 +28,8 @@ case class TodoTable[P <: JdbcProfile]()(implicit val driver: P)
     import Todo._
     // Columns
     /* @1 */ def id              = column[Id]            ("id",           O.UInt64, O.PrimaryKey, O.AutoInc)
-    /* @2 */ def category_id     = column[Category.Id]   ("category_id",  O.UInt64)
+    //カテゴリーと紐つけたらCategory.Id型に変更
+    /* @2 */ def category_id     = column[Int]   ("category_id",  O.UInt64)
     /* @3 */ def title           = column[String]        ("title",        O.Utf8Char255)
     /* @4 */ def content         = column[String]        ("content",      O.Utf8Char255)
     /* @5 */ def state           = column[Status]        ("state",        O.UInt8)
@@ -37,11 +38,11 @@ case class TodoTable[P <: JdbcProfile]()(implicit val driver: P)
  
 
     type TableElementTuple = (
-      Option[Id], Category.Id, String, String, Status, LocalDateTime, LocalDateTime
+      Option[Id], Int, String, String, Status, LocalDateTime, LocalDateTime
     )
 
   // DB <=> Scalaの相互のマッピングの定義
-  
+  //category_idの型変更すること
     def * = (id.?, category_id, title, content, state, updatedAt, createdAt) <> (
       // Tuple(table) => Model
       (t: TableElementTuple) => Todo(

@@ -13,11 +13,10 @@ import play.api.data._
 import play.api.data.Forms._
 import ixias.util.EnumStatus
 import lib.model.Todo.Status
-import play.api.i18n.I18nSupport
+import play.api.i18n.I18nSupport 
 
 
-
-case class TodoFormData(title: String, content: String, state: Int)
+case class TodoFormData(category_id: Int, title: String, content: String, state: Status)
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -39,11 +38,11 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
   val todoForm: Form[TodoFormData] = Form(
     mapping(
+      "category_id" -> number,
       "title"       -> nonEmptyText,
       "content"     -> text,
       "state"       -> number 
-    )(TodoFormData.apply)(TodoFormData.unapply)
-  )
+    )(TodoFormData.apply)(TodoFormData.unapply))
 
 
   def register() = Action{ implicit request: Request[AnyContent] =>
@@ -53,8 +52,35 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
       jsSrc = Seq("main.js"),
       todoForm = todoForm
     )
-    Ok(views.html.todo.Store(vv))
+    Ok(views.html.todo.Register(vv))
   }
 
-  
+  def store() = Action{ implicit request: Request[AnyContent] => 
+    todoForm.bindFromRequest().fold(
+      (formWithErrors: Form[TodoFormData]) => {
+        val vv = ViewValueTodoAdd(
+          title = "新規登録",
+          cssSrc = Seq("main.css"),
+          jsSrc = Seq("main.js"),
+          todoForm = formWithErrors
+        )
+        BadRequest(views.html.todo.Register(vv))
+      },
+      (todoForm: TodoFormData) => {  
+      val recievedForm = (
+        todoForm.category_id,
+        todoForm.title,
+        todoForm.content,
+        todoForm.state
+      )      
+      println(recievedForm)
+//        for {
+//          todoWithNoId <- Todo.apply(recievedForm)
+//          _ <- TodoRepository.add(todoWithNoId)
+//        } yield {
+        Redirect(routes.TodoController.list)
+//        }
+      }
+    )
+  } 
 }

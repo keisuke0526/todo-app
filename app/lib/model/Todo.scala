@@ -8,7 +8,8 @@ import java.time.LocalDateTime
 import Todo._
 case class Todo(
   id:          Option[Id],
-  category_id: Category.Id,
+  //category_idの型変更すること
+  category_id: Int,
   title:       String,
   content:     String,
   state:       Status,
@@ -23,8 +24,6 @@ object Todo{
   val Id = the[Identity[Id]]
   type Id = Long @@ Todo
   type WithNoId = Entity.WithNoId [Id, Todo]
-  //メモ []の中身Id,Todoは、定義元ではどのように処理しているのか？
-  //https://github.com/ixias-net/ixias/blob/635ca0a177892bfd1597a25d8ee203563044a643/framework/ixias-core/src/main/scala/ixias/model/Entity.scala#L46
   type EmbeddedId = Entity.EmbeddedId[Id, Todo]
 
   sealed abstract class Status(val code: Short, val name: String) extends EnumStatus
@@ -34,14 +33,14 @@ object Todo{
     case object DONE  extends Status(code = 2, name = "完了")
   }
 
-  def build(category_id: Category.Id, title: String, state: Status, content: String): WithNoId = {
+  def apply(category_id: Int, title: String, content: String, state: Status): WithNoId = {
     new Entity.WithNoId(
       new Todo(
         id          = None,
         category_id = category_id,
         title       = title,
-        state       = state,
-        content     = content
+        content     = content,
+        state       = state
       )
     )
   }

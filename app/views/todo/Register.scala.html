@@ -1,10 +1,14 @@
 @import controllers.TodoFormData
 @import model.ViewValueTodoAdd
-@(vv: ViewValueTodoAdd)(implicit messagesProvider: MessagesProvider)
+@import helper._
+@(vv: ViewValueTodoAdd)(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
-  @helper.form(action = controllers.routes.TodoController.register()){
-    @helper.inputText(vv.todoForm("title"))
-    @helper.inputText(vv.todoForm("content"))
-    @helper.inputText(vv.todoForm("state"))
+  @form(action = controllers.routes.TodoController.store()){
+    @CSRF.formField 
+    @inputText(vv.todoForm("category_id"))
+    @inputText(vv.todoForm("title"))
+    @textarea(vv.todoForm("content"))
+    @inputText(vv.todoForm("state"))
+    <input type="submit" value="登録">
   }
 }
