@@ -6,7 +6,7 @@
 # An example controller showing a sample home page
 #GET     /                             controllers.HomeController.index
 GET      /                           controllers.TodoController.list
-#GET      /todo/store                 controllers.TodoController.register
+GET      /todo/store                 controllers.TodoController.register
 # POST     /todo/store　　　　　　　　controllers.todo.TodoController.store
 
 # Map static resources from the /public folder to the /assets URL path
