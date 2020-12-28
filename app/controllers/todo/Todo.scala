@@ -8,19 +8,19 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import lib.model.{Todo, Category}
 import lib.persistence.default.{TodoRepository, CategoryRepository}
-import model.{ViewValueTodos, ViewValueCategory}
-// ViewValueTodoAdd
+import model.{ViewValueTodos, ViewValueTodoAdd}
 import play.api.data._
 import play.api.data.Forms._
 import ixias.util.EnumStatus
 import lib.model.Todo.Status
+import play.api.i18n.I18nSupport
 
 
 
-//case class TodoFormatDate(category_id: Category.Id, title: String, content: String, state: Status)
+case class TodoFormData(title: String, content: String, state: Int)
 
 @Singleton
-class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
  //メモ DBへアクセスして、データを返す場合には、Action.asyncというビルダーメソッドを使う。"https://www.playframework.com/documentation/ja/2.3.x/ScalaAsync"参照 
   def list() = Action.async { implicit request: Request[AnyContent] =>
     for {
@@ -33,28 +33,28 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
       jsSrc = Seq("main.js"),
       todoSeq =todos 
     )
-    Ok(views.html.todo.Todo(vv))
+    Ok(views.html.todo.List(vv))
     }
   }
 
- // val form = Form(
- //   mapping(
- //     "category_id" -> category_id,
- //     "title"       -> title,
- //     "content"     -> content,
- //     "state"       -> state
- //   )(TodoFormatDate.apply)(TodoFormatDate.unapply)
- //)
+  val todoForm: Form[TodoFormData] = Form(
+    mapping(
+      "title"       -> nonEmptyText,
+      "content"     -> text,
+      "state"       -> number 
+    )(TodoFormData.apply)(TodoFormData.unapply)
+  )
 
-  //def register() = Action.async { implicit request: Request[AnyContent] =>
-   // val vv = ViewValueTodoAdd(
-//      title = "新規登録",
-//      cssSrc = Seq("main.css"),
-//      jsSrc = Seq("main.js"),
-//      form = form
-//    )
-//   Ok(views.html.todo.Store(vv))
-  //}
+
+  def register() = Action{ implicit request: Request[AnyContent] =>
+    val vv = ViewValueTodoAdd(
+      title = "新規登録",
+      cssSrc = Seq("main.css"),
+      jsSrc = Seq("main.js"),
+      todoForm = todoForm
+    )
+    Ok(views.html.todo.Store(vv))
+  }
 
   
 }
