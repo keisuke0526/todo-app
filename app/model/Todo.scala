@@ -5,6 +5,9 @@ import ixias.util.EnumStatus
 import lib.model.{Todo, Category}
 import lib.model.Todo.Status
 import java.time.LocalDateTime
+import controllers.TodoFormData
+import play.api.data._
+import play.api.data.Forms._
 
 
 case class ViewValueTodos(
@@ -25,11 +28,11 @@ case class ViewValueTodos(
 //  createdAt:   LocalDateTime
 //) 
 
-//case class ViewValueTodoAdd(
-//  title:  String,
-//  cssSrc: Seq[String],
-//  jsSrc:  Seq[String],
-//  form:   TodoFormatDate
-//) extends ViewValueCommon
-//
+case class ViewValueTodoAdd(
+  title:  String,
+  cssSrc: Seq[String],
+  jsSrc:  Seq[String],
+  todoForm:   Form[TodoFormData]
+) extends ViewValueCommon
+
 
