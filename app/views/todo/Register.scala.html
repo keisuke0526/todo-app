@@ -1,0 +1,10 @@
+@import controllers.TodoFormData
+@import model.ViewValueTodoAdd
+@(vv: ViewValueTodoAdd)(implicit messagesProvider: MessagesProvider)
+@common.Default(vv){
+  @helper.form(action = controllers.routes.TodoController.register()){
+    @helper.inputText(vv.todoForm("title"))
+    @helper.inputText(vv.todoForm("content"))
+    @helper.inputText(vv.todoForm("state"))
+  }
+}
