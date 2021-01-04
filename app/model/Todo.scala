@@ -29,10 +29,10 @@ case class ViewValueTodos(
 //) 
 
 case class ViewValueTodoAdd(
-  title:  String,
-  cssSrc: Seq[String],
-  jsSrc:  Seq[String],
-  todoForm:   Form[TodoFormData]
+  title:       String,
+  cssSrc:      Seq[String],
+  jsSrc:       Seq[String],
+  todoForm:    Form[TodoFormData]
 ) extends ViewValueCommon
 
 

@@ -16,7 +16,7 @@ import lib.model.Todo.Status
 import play.api.i18n.I18nSupport 
 
 
-case class TodoFormData(category_id: Int, title: String, content: String, state: Status)
+case class TodoFormData(categoryId: Long, title: String, content: String, state: Short)
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -38,10 +38,10 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
   val todoForm: Form[TodoFormData] = Form(
     mapping(
-      "category_id" -> number,
+      "category_id" -> longNumber,
       "title"       -> nonEmptyText,
       "content"     -> text,
-      "state"       -> number 
+      "state"       -> shortNumber(min = 0, max = 100)
     )(TodoFormData.apply)(TodoFormData.unapply))
 
 
@@ -55,7 +55,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.todo.Register(vv))
   }
 
-  def store() = Action{ implicit request: Request[AnyContent] => 
+  def store() = Action.async{ implicit request: Request[AnyContent] => 
     todoForm.bindFromRequest().fold(
       (formWithErrors: Form[TodoFormData]) => {
         val vv = ViewValueTodoAdd(
@@ -64,22 +64,22 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
           jsSrc = Seq("main.js"),
           todoForm = formWithErrors
         )
-        BadRequest(views.html.todo.Register(vv))
+        Future.successful(BadRequest(views.html.todo.Register(vv)))
       },
       (todoForm: TodoFormData) => {  
-      val recievedForm = (
-        todoForm.category_id,
+//      println(todoForm) // TodoFormData(1,テスト,テストです,1)
+      val todoWithNoId = Todo.apply(
+        todoForm.categoryId,
         todoForm.title,
         todoForm.content,
         todoForm.state
-      )      
-      println(recievedForm)
-//        for {
-//          todoWithNoId <- Todo.apply(recievedForm)
-//          _ <- TodoRepository.add(todoWithNoId)
-//        } yield {
+      ) 
+      //println(todoWithNoId)
+       for {
+          _ <- TodoRepository.add(todoWithNoId)
+        } yield {
         Redirect(routes.TodoController.list)
-//        }
+        }
       }
     )
   } 
