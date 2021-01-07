@@ -3,7 +3,6 @@ package lib.persistence.db
 import java.time.LocalDateTime
 import slick.jdbc.JdbcProfile
 import ixias.persistence.model.Table
-import lib.model.Category 
 import lib.model.Todo
 import lib.model.Todo.Status
 
@@ -29,28 +28,27 @@ case class TodoTable[P <: JdbcProfile]()(implicit val driver: P)
     // Columns
     /* @1 */ def id              = column[Id]            ("id",           O.UInt64, O.PrimaryKey, O.AutoInc)
     //カテゴリーと紐つけたらCategory.Id型に変更
-    /* @2 */ def categoryId     = column[Long]          ("categoryId",  O.UInt64)
-    /* @3 */ def title           = column[String]        ("title",        O.Utf8Char255)
-    /* @4 */ def content         = column[String]        ("content",      O.Utf8Char255)
-    /* @5 */ def state           = column[Short]        ("state",        O.UInt8)
-    /* @6 */ def updatedAt       = column[LocalDateTime] ("updated_at",   O.TsCurrent)
-    /* @7 */ def createdAt       = column[LocalDateTime] ("created_at",   O.Ts)
+    /* @2 */ def title           = column[String]        ("title",        O.Utf8Char255)
+    /* @3 */ def content         = column[String]        ("content",      O.Utf8Char255)
+    /* @4 */ def state           = column[Short]        ("state",        O.UInt8)
+    /* @5 */ def updatedAt       = column[LocalDateTime] ("updated_at",   O.TsCurrent)
+    /* @6 */ def createdAt       = column[LocalDateTime] ("created_at",   O.Ts)
  
 
     type TableElementTuple = (
-      Option[Id], Long, String, String, Short, LocalDateTime, LocalDateTime
+      Option[Id], String, String, Short, LocalDateTime, LocalDateTime
     )
 
   // DB <=> Scalaの相互のマッピングの定義
   //category_idの型変更すること
-    def * = (id.?, categoryId, title, content, state, updatedAt, createdAt) <> (
+    def * = (id.?, title, content, state, updatedAt, createdAt) <> (
       // Tuple(table) => Model
       (t: TableElementTuple) => Todo(
-        t._1, t._2, t._3, t._4, t._5, t._6, t._7
+        t._1, t._2, t._3, t._4, t._5, t._6
       ),
       // Model => Tuple(table)
       (v: TableElementType) => Todo.unapply(v).map { t => (
-        t._1, t._2, t._3, t._4, t._5, LocalDateTime.now(), t._7
+        t._1, t._2, t._3, t._4, LocalDateTime.now(), t._6
       )}
     )
   }

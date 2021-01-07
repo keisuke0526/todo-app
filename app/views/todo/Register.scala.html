@@ -5,7 +5,6 @@
 @common.Default(vv){
   @form(action = controllers.routes.TodoController.store()){
     @CSRF.formField 
-    @inputText(vv.todoForm("category_id"))
     @inputText(vv.todoForm("title"))
     @textarea(vv.todoForm("content"))
     @inputText(vv.todoForm("state"))

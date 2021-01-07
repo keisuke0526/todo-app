@@ -1,0 +1,12 @@
+@*@import controllers.TodoFormData*@
+@*@import model.ViewValueTodoEdit*@
+@*@import helper._*@
+@*@(vv: ViewValueTodoEdit)(implicit messagesProvider: MessagesProvider)*@
+@*@common.Default(vv){*@
+@*  @form(action = controllers.routes.TodoController.update(vv.id)){
+    @inputText(vv.todoForm("title"))
+    @textarea(vv.todoForm("content"))
+    @inputText(vv.todoForm("state"))
+    <input type="submit" value="更新">
+  }
+}*@

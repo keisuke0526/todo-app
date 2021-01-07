@@ -8,8 +8,6 @@ import java.time.LocalDateTime
 import Todo._
 case class Todo(
   id:          Option[Id],
-  //category_idの型変更すること
-  category_id: Long,
   title:       String,
   content:     String,
   state:       Short,
@@ -33,11 +31,10 @@ object Todo{
     case object Done  extends Status(code = 2, name = "完了")
   }
 
-  def apply(category_id: Long, title: String, content: String, state: Short): WithNoId = {
+  def apply(title: String, content: String, state: Short): WithNoId = {
     new Entity.WithNoId(
       new Todo(
         id          = None,
-        category_id = category_id,
         title       = title,
         content     = content,
         state       = state

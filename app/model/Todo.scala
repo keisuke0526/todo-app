@@ -2,7 +2,7 @@ package model
 
 import ixias.model._
 import ixias.util.EnumStatus
-import lib.model.{Todo, Category}
+import lib.model.Todo
 import lib.model.Todo.Status
 import java.time.LocalDateTime
 import controllers.TodoFormData
@@ -29,10 +29,16 @@ case class ViewValueTodos(
 //) 
 
 case class ViewValueTodoAdd(
-  title:       String,
-  cssSrc:      Seq[String],
-  jsSrc:       Seq[String],
-  todoForm:    Form[TodoFormData]
+  title:    String,
+  cssSrc:   Seq[String],
+  jsSrc:    Seq[String],
+  todoForm: Form[TodoFormData]
 ) extends ViewValueCommon
 
-
+case class ViewValueTodoEdit(   
+  id:       Long,
+  title:    String,
+  cssSrc:   Seq[String],
+  jsSrc:    Seq[String],
+  todoForm: Form[TodoFormData]
+) extends ViewValueCommon
