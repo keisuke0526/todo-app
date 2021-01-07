@@ -1,11 +1,27 @@
 @(vv: model.ViewValueTodos)
 @common.Default(vv){
-
-<ul>
-  @for(todo <- vv.todoSeq) {
-    <li>@todo.id | @todo.v.title | @todo.v.content | @todo.v.state | @todo.v.updatedAt | @todo.v.createdAt </li>
+  <div class="todoBox">
+    <table>
+      <thead>
+        <tr>
+          <th>タイトル</th>
+          <th>タスク</th>
+        </tr>
+      </thead>
+      <tbody>
+    @for(todo <- vv.todoSeq) {
+        <tr>
+          <td>@todo.v.title|</td>
+          <td>@todo.v.content|</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   }
-</ul>
-<a href="todo/register">+</a>
+
 }
+
+
+
+@*@todo.id | @todo.v.title | @todo.v.content | @todo.v.state | @todo.v.updatedAt | @todo.v.createdAt*@
 
