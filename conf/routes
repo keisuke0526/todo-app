@@ -12,5 +12,6 @@ POST     /todo/store                 controllers.TodoController.store
 #POST     /todo/edit/update           controllers.TodoController.update(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
+# CSSファイルへのアクセス
 GET      /assets/*file                controllers.Assets.versioned(path="/public", file: Asset)
 
