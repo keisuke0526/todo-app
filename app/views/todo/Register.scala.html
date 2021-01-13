@@ -1,0 +1,13 @@
+@import controllers.TodoFormData
+@import model.ViewValueTodoAdd
+@import helper._
+@(vv: ViewValueTodoAdd)(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
+@common.Default(vv){
+  @form(action = controllers.routes.TodoController.store()){
+    @CSRF.formField 
+    @inputText(vv.todoForm("title"))
+    @textarea(vv.todoForm("content"))
+    @inputText(vv.todoForm("state"))
+    <input type="submit" value="登録">
+  }
+}
