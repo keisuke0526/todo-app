@@ -1,23 +1,10 @@
 @(vv: model.ViewValueTodos)
 @common.Default(vv){
   <div class="todoBox">
-    <table>
-      <thead>
-        <tr>
-          <th>タイトル</th>
-          <th>タスク</th>
-        </tr>
-      </thead>
-      <tbody>
     @for(todo <- vv.todoSeq) {
-        <tr>
-          <td>@todo.v.title|</td>
-          <td>@todo.v.content|</td>
-        </tr>
-      </tbody>
-    </table>
+      <p class="todoBox__title">タイトル: @todo.v.title | </p>
   </div>
-  }
+  
 
 }
 
