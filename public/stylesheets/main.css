@@ -1,3 +1,4 @@
+@import "todoList";
 /**
  * to-do list
  */
@@ -41,13 +42,40 @@ body {
   position:   relative;
 }
 
-.todoBox__upper {
-  
-}
-
 .todoBox__list {
   display: flex;
   justify-content: space-between;
+}
+
+.todoList__nav {
+  height: 30px;
+  width: 980px;
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.todoList__left {
+  width: 50%;
+}
+
+.todoList__right {
+  width: 50%;
+}
+
+.todoBox {
+  display: flex;
+  box-shadow: 0 0 4px gray;
+}
+
+.todoBox__left {
+  width:40%;
+  margin-left:10px;
+}
+
+.todoBox__middle {
+  width:60%;
 }
 
 .success-message {

@@ -1,14 +1,25 @@
 @(vv: model.ViewValueTodos)
 @common.Default(vv){
-  <div class="todoBox">
-    @for(todo <- vv.todoSeq) {
-      <p class="todoBox__title">タイトル: @todo.v.title | </p>
+<div class="todoList">
+  <div class="todoList__nav">
+    <div class="todoList__left">タイトル</div>
+    <div class="todoList__right">内容</div>
   </div>
-  
 
+  @for(todo <- vv.todoSeq) {
+    <div class="todoBox">
+      <div class="todoBox__left">
+      <p class="todoBox__title">タイトル: @todo.v.title </p>
+      </div>
+      <div class="todoBox__middle">
+      <p class="todoBox__content">@todo.v.content</p>
+      </div>
+    </div>
+  }
+</div>  
 }
 
 
 
-@*@todo.id | @todo.v.title | @todo.v.content | @todo.v.state | @todo.v.updatedAt | @todo.v.createdAt*@
+@* @todo.id | @todo.v.title | @todo.v.content | @todo.v.state | @todo.v.updatedAt | @todo.v.createdAt *@
 
